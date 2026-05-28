@@ -710,6 +710,110 @@
             font-size: 0.9rem;
         }
 
+        .contact-form-section {
+            padding: 100px 0;
+            background: linear-gradient(180deg, rgba(15, 15, 26, 0.95) 0%, var(--background) 100%);
+        }
+
+        .contact-form-wrapper {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        .contact-form-header {
+            margin-bottom: 30px;
+        }
+
+        .contact-form-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .contact-form-header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .contact-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .contact-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .contact-form-group label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .contact-form-group input,
+        .contact-form-group select,
+        .contact-form-group textarea {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-light);
+            padding: 14px 16px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .contact-form-group input:focus,
+        .contact-form-group select:focus,
+        .contact-form-group textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.1);
+        }
+
+        .contact-form-group span.error {
+            color: #ff6b6b;
+            font-size: 0.85rem;
+            min-height: 18px;
+        }
+
+        .contact-form .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .contact-submit {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .contact-submit button {
+            width: 100%;
+            max-width: 260px;
+            background: linear-gradient(135deg, var(--accent), #c73e54);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .contact-submit button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px rgba(233, 69, 96, 0.38);
+        }
+
         /* Animations */
         @keyframes fadeInUp {
             from {
@@ -1063,8 +1167,57 @@
         </div>
     </section>
 
+    <!-- Contact Form Section -->
+    <section class="contact-form-section" id="contact">
+        <div class="container">
+            <div class="contact-form-wrapper fade-in">
+                <div class="contact-form-header">
+                    <span class="section-tag">// CONTACTO</span>
+                    <h2>Registra tus datos</h2>
+                    <p>Completa el formulario y recibe la confirmación inmediata con un archivo CSV descargable.</p>
+                </div>
+                <form id="contact-form" class="contact-form" novalidate>
+                    <div class="contact-form-group">
+                        <label for="nombre">Nombre completo</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre completo" required>
+                        <span class="error" id="error-nombre"></span>
+                    </div>
+                    <div class="contact-form-group">
+                        <label for="email">Correo electrónico</label>
+                        <input type="email" id="email" name="email" placeholder="ejemplo@dominio.com" required>
+                        <span class="error" id="error-email"></span>
+                    </div>
+                    <div class="contact-form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono" name="telefono" placeholder="+521234567890" required>
+                        <span class="error" id="error-telefono"></span>
+                    </div>
+                    <div class="contact-form-group">
+                        <label for="producto">Producto favorito</label>
+                        <select id="producto" name="producto" required>
+                            <option value="">Selecciona una opción</option>
+                            <option value="Pokémon">Pokémon</option>
+                            <option value="Yu-Gi-Oh!">Yu-Gi-Oh!</option>
+                            <option value="Bakugan">Bakugan</option>
+                            <option value="TCGs">TCGs</option>
+                        </select>
+                        <span class="error" id="error-producto"></span>
+                    </div>
+                    <div class="contact-form-group full-width">
+                        <label for="mensaje">Mensaje</label>
+                        <textarea id="mensaje" name="mensaje" rows="4" placeholder="Cuéntanos qué tipo de cartas coleccionas" required></textarea>
+                        <span class="error" id="error-mensaje"></span>
+                    </div>
+                    <div class="contact-submit full-width">
+                        <button type="submit">Enviar formulario</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="footer" id="contact">
+    <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
@@ -1178,6 +1331,98 @@
                     });
                 }
             });
+        });
+
+        const form = document.getElementById('contact-form');
+        const fieldValidators = {
+            nombre: {
+                validator: value => /^[A-Za-zÀ-ÿ\s]{3,}$/.test(value.trim()),
+                message: 'Ingresa un nombre válido (solo letras y espacios).'
+            },
+            email: {
+                validator: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()),
+                message: 'Ingresa un correo electrónico válido.'
+            },
+            telefono: {
+                validator: value => /^\+?\d{7,15}$/.test(value.trim()),
+                message: 'Ingresa un teléfono válido (solo números, opcional +).'
+            },
+            producto: {
+                validator: value => ['Pokémon', 'Yu-Gi-Oh!', 'Bakugan', 'TCGs'].includes(value),
+                message: 'Selecciona un producto de la lista.'
+            },
+            mensaje: {
+                validator: value => value.trim().length >= 10,
+                message: 'Ingresa un mensaje de al menos 10 caracteres.'
+            }
+        };
+
+        function showError(fieldName, message) {
+            const errorEl = document.getElementById(`error-${fieldName}`);
+            if (errorEl) {
+                errorEl.textContent = message;
+            }
+        }
+
+        function clearErrors() {
+            Object.keys(fieldValidators).forEach(name => showError(name, ''));
+        }
+
+        function formToCsvRow(values) {
+            return values.map(value => `"${String(value).replace(/"/g, '""')}"`).join(',');
+        }
+
+        function saveSubmissionToCsv(data) {
+            const storageKey = 'contactFormSubmissions';
+            const stored = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            stored.push(data);
+            localStorage.setItem(storageKey, JSON.stringify(stored));
+
+            const headers = ['Nombre', 'Correo', 'Teléfono', 'Producto', 'Mensaje'];
+            const csvLines = [headers.join(',')];
+            stored.forEach(row => {
+                csvLines.push(formToCsvRow([row.nombre, row.email, row.telefono, row.producto, row.mensaje]));
+            });
+
+            const blob = new Blob([csvLines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'registro-formulario.csv';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function validateForm() {
+            clearErrors();
+            let valid = true;
+            const formData = new FormData(form);
+            const data = {};
+
+            Object.entries(fieldValidators).forEach(([name, { validator, message }]) => {
+                const value = String(formData.get(name) || '').trim();
+                data[name] = value;
+                if (!validator(value)) {
+                    showError(name, message);
+                    valid = false;
+                }
+            });
+
+            return valid ? data : null;
+        }
+
+        form.addEventListener('submit', event => {
+            event.preventDefault();
+            const data = validateForm();
+            if (!data) {
+                return;
+            }
+
+            saveSubmissionToCsv(data);
+            alert('Formulario enviado.');
+            form.reset();
         });
     </script>
 </body>
